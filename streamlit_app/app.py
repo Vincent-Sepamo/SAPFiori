@@ -52,13 +52,13 @@ def build_embed_html() -> str:
     html = html.replace('src="assets/sap-logo.png"', f'src="{img_src}"')
     html = re.sub(
         r'<link\s+rel="stylesheet"\s+href="styles\.css"\s*/>',
-        f"<style>\n{css}\n</style>",
+        lambda _m: f"<style>\n{css}\n</style>",
         html,
         count=1,
     )
     html = re.sub(
         r'<script\s+src="app\.js"\s*>\s*</script>',
-        f"<script>\n{js}\n</script>",
+        lambda _m: f"<script>\n{js}\n</script>",
         html,
         count=1,
     )
