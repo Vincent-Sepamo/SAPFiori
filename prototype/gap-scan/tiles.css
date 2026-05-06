@@ -1,0 +1,137 @@
+/* Apps / launchpad tiles — after login */
+
+:root {
+  --tiles-font: "72", "72full", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --tiles-icon-bg: #e5f0fa;
+  --tiles-icon-fg: #0070f2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.tiles-page {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--tiles-font);
+  font-size: 14px;
+  color: #323e48;
+  background: linear-gradient(180deg, #c8dff0 0%, #e8f2f9 38%, #f7fbfd 72%, #ffffff 100%);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+}
+
+.tiles-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 10px 20px;
+  background: #a6c3dc;
+  border-bottom: 1px solid #8eb4cf;
+}
+
+.tiles-header__logo {
+  display: block;
+  height: 32px;
+  width: auto;
+  max-width: 76px;
+  object-fit: contain;
+}
+
+.tiles-main {
+  flex: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px 48px;
+}
+
+.tiles-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 168px;
+  min-height: 168px;
+  padding: 20px 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(142, 180, 207, 0.45);
+  box-shadow: 0 2px 8px rgba(19, 30, 41, 0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.app-tile:hover {
+  box-shadow: 0 6px 20px rgba(19, 30, 41, 0.1);
+  transform: translateY(-2px);
+}
+
+.app-tile:focus-visible {
+  outline: 2px solid #0070f2;
+  outline-offset: 3px;
+}
+
+.app-tile--pending {
+  cursor: default;
+  opacity: 0.95;
+}
+
+.app-tile--pending:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(19, 30, 41, 0.06);
+}
+
+.app-tile--pending:focus-visible {
+  outline-color: #8eb4cf;
+}
+
+.app-tile__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--tiles-icon-bg);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.app-tile__icon-wrap svg {
+  display: block;
+}
+
+.app-tile__label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.35;
+  color: #131e29;
+}
+
+.tiles-hint {
+  margin: 20px 0 0;
+  font-size: 13px;
+  color: #556b82;
+}
+
+@media (max-width: 420px) {
+  .tiles-grid {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Replenishment App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="shell" role="banner">
+        <div class="shell__left">
+          <button type="button" class="shell__btn" aria-label="Back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <div class="shell__logo">
+            <img
+              class="shell__logo-img"
+              src="assets/sap-logo.png"
+              alt="SAP"
+              width="60"
+              height="30"
+            />
+          </div>
+          <div class="shell__title-wrap">
+            <button type="button" class="shell__title">
+              Replenishment App
+              <svg class="shell__chevron" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="shell__right">
+          <button type="button" class="shell__btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-4-4" />
+            </svg>
+          </button>
+          <button type="button" class="shell__btn" aria-label="User profile">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c2-4 6-6 8-6s6 2 8 6" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="main-split">
+        <aside class="master" aria-label="Documents list">
+          <div class="master__header">Documents List</div>
+          <div class="master__toolbar">
+            <div class="search-field">
+              <input id="doc-search" type="search" placeholder="Search by ID" autocomplete="off" />
+            </div>
+            <button type="button" class="icon-btn" id="btn-refresh-docs" aria-label="Refresh">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 2v6h-6M3 12a9 9 0 0115.2-6.7M3 22v-6h6M21 12a9 9 0 01-15.2 6.7" />
+              </svg>
+            </button>
+            <button type="button" class="icon-btn" id="btn-filter-docs" aria-label="Filter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16M7 12h10M10 18h4" />
+              </svg>
+            </button>
+          </div>
+          <div class="master__list" id="master-list"></div>
+        </aside>
+
+        <main class="detail">
+          <div class="detail__page-label">Detail Page</div>
+          <div class="detail__body">
+            <h1 class="detail__title" id="detail-title">Create New</h1>
+            <ul class="detail__summary" id="detail-summary"></ul>
+            <div class="detail__toolbar">
+              <div class="search-field">
+                <input id="article-search" type="search" placeholder="Search by Article Name" autocomplete="off" />
+              </div>
+              <button type="button" class="icon-btn" id="btn-refresh-articles" aria-label="Refresh">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 2v6h-6M3 12a9 9 0 0115.2-6.7M3 22v-6h6M21 12a9 9 0 01-15.2 6.7" />
+                </svg>
+              </button>
+              <button type="button" class="icon-btn" aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M20 20l-4-4" />
+                </svg>
+              </button>
+              <button type="button" class="icon-btn" id="btn-filter-articles" aria-label="Filter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 6h16M7 12h10M10 18h4" />
+                </svg>
+              </button>
+              <div class="detail__toolbar-spacer"></div>
+            </div>
+            <div class="article-list" id="article-list"></div>
+          </div>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <span class="footer__store">M01 - Germiston Main Store</span>
+        <div class="footer__actions" id="footer-actions-create">
+          <button type="button" class="btn btn--secondary" id="btn-select-all">Select All</button>
+          <button type="button" class="btn btn--primary" id="btn-save">Save</button>
+        </div>
+        <div class="footer__actions" id="footer-actions-replenish" hidden>
+          <button type="button" class="btn btn--close-task" id="btn-close-task">Close</button>
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div
+      class="modal-backdrop fill-modal-backdrop"
+      id="fill-modal-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog fill-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="fill-modal-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="fill-modal-title">Close Gap</h2>
+        </div>
+        <div class="modal__body">
+          <p class="fill-modal__line">
+            <span class="modal__label">Article :</span>
+            <span id="fill-modal-article-name"></span>
+          </p>
+          <p class="fill-modal__line">
+            <span class="modal__label">Close Gap :</span>
+            Aisle 1 | Shelf 1
+          </p>
+          <div class="fill-modal__choices" role="group" aria-label="Fill status">
+            <label class="fill-modal__choice">
+              <input type="radio" name="fill-gap-status" value="Filled in full" />
+              Filled in full
+            </label>
+            <label class="fill-modal__choice">
+              <input type="radio" name="fill-gap-status" value="Limited stock" />
+              Limited stock
+            </label>
+          </div>
+        </div>
+        <div class="filter-modal__footer fill-modal__footer-actions">
+          <button type="button" class="filter-modal__cancel" id="fill-cancel">Cancel</button>
+          <button type="button" class="filter-modal__execute" id="fill-save">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop"
+      id="article-modal-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="article-modal-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="article-modal-title">Articles Details</h2>
+        </div>
+        <div class="modal__body">
+          <div class="modal__product" id="modal-product"></div>
+          <div class="modal__meta">
+            <div class="modal__meta-row">
+              <span class="modal__label">Article Number:</span>
+              <span id="modal-article-num"></span>
+            </div>
+            <div class="modal__meta-row">
+              <span class="modal__label">GTIN:</span>
+              <span id="modal-gtin"></span>
+            </div>
+          </div>
+          <h3 class="modal__section-title">Stock On Hand</h3>
+          <div class="modal__stock-hand" id="modal-stock-hand"></div>
+          <h3 class="modal__section-title">Stock on order</h3>
+          <div class="modal__order">
+            <div class="modal__order-row">
+              <span class="modal__order-label">Last order date :</span>
+              <span id="modal-order-date"></span>
+            </div>
+            <div class="modal__order-row">
+              <span class="modal__order-label">Quantity :</span>
+              <span id="modal-order-qty"></span>
+            </div>
+            <div class="modal__order-row">
+              <span class="modal__order-label">Expected Delivery Date :</span>
+              <span id="modal-order-edd"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="modal__close-btn" id="modal-close">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop repl-select-backdrop"
+      id="repl-select-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog repl-select-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="repl-select-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="repl-select-title">
+            Article details &amp; replenishment
+          </h2>
+        </div>
+        <div class="modal__body">
+          <div class="modal__product" id="repl-modal-product"></div>
+          <div class="modal__meta">
+            <div class="modal__meta-row">
+              <span class="modal__label">Article Number:</span>
+              <span id="repl-modal-article-num"></span>
+            </div>
+            <div class="modal__meta-row">
+              <span class="modal__label">GTIN:</span>
+              <span id="repl-modal-gtin"></span>
+            </div>
+          </div>
+          <div class="modal__meta-row repl-modal__location-row">
+            <span class="modal__label">Gap Location:</span>
+            <span id="repl-modal-location"></span>
+          </div>
+          <div class="repl-modal__divider" role="presentation"></div>
+          <h3 class="modal__section-title">Replenishment</h3>
+          <p class="repl-modal__hint">
+            Select <strong>Replenished</strong> first; then choose a <strong>Code</strong> allowed for that
+            value (see ReplenishedCodes).
+          </p>
+          <div class="repl-modal__field">
+            <label class="filter-field__label" for="repl-value">Replenished</label>
+            <select id="repl-value" class="filter-select" autocomplete="off">
+              <option value="">Select…</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="repl-modal__field">
+            <label class="filter-field__label" for="repl-code">Code</label>
+            <select id="repl-code" class="filter-select" autocomplete="off" disabled></select>
+          </div>
+        </div>
+        <div class="filter-modal__footer repl-modal__footer">
+          <button type="button" class="filter-modal__cancel" id="repl-select-cancel">
+            Cancel
+          </button>
+          <button type="button" class="filter-modal__execute" id="repl-select-save">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop filter-modal-backdrop"
+      id="filter-modal-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog filter-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="filter-modal-title"
+      >
+        <div class="filter-modal__header">
+          <h2 class="filter-modal__title" id="filter-modal-title">
+            Articles Filter
+          </h2>
+        </div>
+        <div class="filter-modal__body">
+          <div class="filter-field">
+            <label class="filter-field__label" for="filter-scanner"
+              >GAP scanner name:</label
+            >
+            <select
+              id="filter-scanner"
+              class="filter-select"
+              autocomplete="off"
+            ></select>
+          </div>
+          <div class="filter-field">
+            <label class="filter-field__label" for="filter-division"
+              >Division:</label
+            >
+            <select
+              id="filter-division"
+              class="filter-select"
+              autocomplete="off"
+            ></select>
+          </div>
+          <div class="filter-field">
+            <label class="filter-field__label" for="filter-department"
+              >Department:</label
+            >
+            <select
+              id="filter-department"
+              class="filter-select"
+              autocomplete="off"
+            ></select>
+          </div>
+          <div class="filter-field">
+            <label class="filter-field__label" for="filter-bmc">BMC:</label>
+            <select id="filter-bmc" class="filter-select" autocomplete="off"></select>
+          </div>
+        </div>
+        <div class="filter-modal__footer">
+          <button type="button" class="filter-modal__cancel" id="filter-cancel">
+            Cancel
+          </button>
+          <button type="button" class="filter-modal__execute" id="filter-execute">
+            Execute
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop remove-article-backdrop"
+      id="remove-article-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog remove-article-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="remove-article-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="remove-article-title">Remove Article</h2>
+        </div>
+        <div class="modal__body">
+          <div class="remove-article__field">
+            <label class="filter-field__label" for="remove-location">Scan / Enter location:</label>
+            <input
+              id="remove-location"
+              class="filter-select remove-article__input"
+              type="text"
+              autocomplete="off"
+              placeholder="Enter location"
+            />
+          </div>
+          <div class="remove-article__field">
+            <label class="filter-field__label" for="remove-gtin">Scan GTIN:</label>
+            <input
+              id="remove-gtin"
+              class="filter-select remove-article__input"
+              type="text"
+              autocomplete="off"
+              placeholder="Scan GTIN"
+            />
+          </div>
+          <div class="remove-article__field">
+            <label class="filter-field__label" for="remove-qty">Enter Quantity:</label>
+            <input
+              id="remove-qty"
+              class="filter-select remove-article__input"
+              type="number"
+              inputmode="numeric"
+              min="0"
+              autocomplete="off"
+              placeholder="0"
+            />
+          </div>
+          <div class="remove-article__field">
+            <label class="filter-field__label" for="remove-exp">Exp/Best before Date: DD/MM only</label>
+            <input
+              id="remove-exp"
+              class="filter-select remove-article__input"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="DD/MM"
+            />
+          </div>
+        </div>
+        <div class="filter-modal__footer remove-article__footer">
+          <button type="button" class="remove-article__bin" id="remove-bin" aria-label="Article not found">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M9 3h6l1 2h4v2H4V5h4l1-2zm1 6h2v10h-2V9zm4 0h2v10h-2V9zM7 9h2v10H7V9z"
+              />
+            </svg>
+          </button>
+
+          <div class="remove-article__footer-actions">
+            <button type="button" class="filter-modal__cancel" id="remove-cancel">
+              Cancel
+            </button>
+            <button type="button" class="filter-modal__execute" id="remove-confirm">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop article-not-found-backdrop"
+      id="article-not-found-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog article-not-found-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="article-not-found-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="article-not-found-title">Article Not Found</h2>
+        </div>
+        <div class="modal__body">
+          <div class="remove-article__field">
+            <label class="filter-field__label">Reason</label>
+            <div class="anf__reasons">
+              <label class="anf__reason">
+                <input type="radio" name="anf-reason" value="Stock not found" />
+                Stock not found
+              </label>
+              <label class="anf__reason">
+                <input type="radio" name="anf-reason" value="Damaged Stock" />
+                Damaged Stock
+              </label>
+              <label class="anf__reason">
+                <input type="radio" name="anf-reason" value="Exp Stock" />
+                Exp Stock
+              </label>
+            </div>
+          </div>
+
+          <div class="remove-article__field" id="anf-location-field" hidden>
+            <label class="filter-field__label" for="anf-location">Scan / Enter Location</label>
+            <input
+              id="anf-location"
+              class="filter-select remove-article__input"
+              type="text"
+              autocomplete="off"
+              placeholder="Enter location"
+            />
+          </div>
+        </div>
+        <div class="filter-modal__footer">
+          <button type="button" class="filter-modal__cancel" id="anf-cancel">
+            Cancel
+          </button>
+          <button type="button" class="filter-modal__execute" id="anf-save">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop error-backdrop" id="error-backdrop" hidden aria-hidden="true">
+      <div
+        class="modal-dialog error-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="error-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="error-title">Error</h2>
+        </div>
+        <div class="modal__body">
+          <p class="error__text" id="error-message">Task not finished</p>
+        </div>
+        <div class="filter-modal__footer">
+          <button type="button" class="filter-modal__execute" id="error-close">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop close-gap-scan-error-backdrop"
+      id="close-gap-scan-error-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog error-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="close-gap-scan-error-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="close-gap-scan-error-title">ERROR SCREEN</h2>
+        </div>
+        <div class="modal__body">
+          <p class="error__text">Article not for this task</p>
+        </div>
+        <div class="filter-modal__footer">
+          <button type="button" class="filter-modal__execute" id="close-gap-scan-error-close">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop task-complete-backdrop"
+      id="task-complete-backdrop"
+      hidden
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog error-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="task-complete-title"
+      >
+        <div class="modal__header">
+          <h2 class="modal__title" id="task-complete-title">TASK COMPLETE</h2>
+        </div>
+        <div class="modal__body">
+          <p class="error__text">All articles for this task have been scanned.</p>
+        </div>
+        <div class="filter-modal__footer">
+          <button type="button" class="filter-modal__execute" id="task-complete-close">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

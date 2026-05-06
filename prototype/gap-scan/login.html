@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logon — Replenishment App</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body class="login-page">
+    <div class="login-page__decoration" aria-hidden="true"></div>
+
+    <header class="login-header">
+      <img
+        class="login-header__logo"
+        src="assets/sap-logo.png"
+        alt="SAP"
+        width="72"
+        height="36"
+      />
+    </header>
+
+    <main class="login-main">
+      <div class="login-panel">
+        <form id="login-form" class="login-form" novalidate>
+          <label class="visually-hidden" for="login-user">User</label>
+          <input
+            id="login-user"
+            class="login-field"
+            type="text"
+            name="user"
+            placeholder="User"
+            autocomplete="username"
+          />
+
+          <label class="visually-hidden" for="login-password">Password</label>
+          <input
+            id="login-password"
+            class="login-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+          />
+
+          <label class="login-label" for="login-language">Language</label>
+          <select id="login-language" class="login-select" name="language">
+            <option value="en" selected>EN - English</option>
+          </select>
+
+          <button type="submit" class="login-submit">Log On</button>
+        </form>
+
+        <a class="login-change-pw" href="#" id="change-password">Change Password</a>
+
+        <aside class="login-credentials" aria-label="Demo credentials">
+          <p class="login-credentials__title">Demo credentials</p>
+          <p class="login-credentials__row">username: vincent</p>
+          <p class="login-credentials__row">Password: Password</p>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="login-footer">
+      Copyright © 2026 SAP SE. All rights reserved.
+    </footer>
+
+    <script>
+      (function () {
+        document.getElementById("login-form").addEventListener("submit", function (e) {
+          e.preventDefault();
+          window.location.href = "tiles.html";
+        });
+        document.getElementById("change-password").addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      })();
+    </script>
+  </body>
+</html>
