@@ -207,10 +207,8 @@
     replSelectCancel: document.getElementById("repl-select-cancel"),
     replSelectSave: document.getElementById("repl-select-save"),
     removeBackdrop: document.getElementById("remove-article-backdrop"),
-    removeLocation: document.getElementById("remove-location"),
     removeGtin: document.getElementById("remove-gtin"),
     removeQty: document.getElementById("remove-qty"),
-    removeExp: document.getElementById("remove-exp"),
     removeCancel: document.getElementById("remove-cancel"),
     removeConfirm: document.getElementById("remove-confirm"),
     removeBin: document.getElementById("remove-bin"),
@@ -665,13 +663,11 @@
   function openRemoveArticleModal(line) {
     if (!line) return;
     removeLineKey = line.key || null;
-    els.removeLocation.value = "";
     els.removeGtin.value = "";
     els.removeQty.value = "";
-    els.removeExp.value = "";
     els.removeBackdrop.hidden = false;
     els.removeBackdrop.setAttribute("aria-hidden", "false");
-    els.removeLocation.focus();
+    els.removeGtin.focus();
   }
 
   function closeRemoveArticleModal() {
@@ -885,18 +881,8 @@
     return true;
   }
 
-  /** "From" on Close Gap = location scanned/entered on Remove Article for that GTIN, when available. */
+  /** "From" on Close Gap = fallback (Remove Article no longer captures location). */
   function getCloseGapFromLocation(entry, gtin) {
-    const r = entry ? getReplenishmentPayload(entry) : null;
-    if (!r || !r.lines || !gtin) return CLOSE_GAP_FROM_FALLBACK;
-    const line = r.lines.find(
-      (l) =>
-        l.gtin === gtin &&
-        l.removed === true &&
-        l.removedMeta &&
-        String(l.removedMeta.location || "").trim()
-    );
-    if (line) return String(line.removedMeta.location).trim();
     return CLOSE_GAP_FROM_FALLBACK;
   }
 
@@ -1583,33 +1569,19 @@
   });
   els.replSelectSave.addEventListener("click", saveReplSelection);
 
-  els.removeExp.addEventListener("input", () => {
-    const next = normalizeDdMm(els.removeExp.value);
-    if (next !== els.removeExp.value) els.removeExp.value = next;
-  });
   els.removeCancel.addEventListener("click", closeRemoveArticleModal);
   els.removeBackdrop.addEventListener("click", (e) => {
     if (e.target === els.removeBackdrop) closeRemoveArticleModal();
   });
   els.removeConfirm.addEventListener("click", () => {
-    const loc = (els.removeLocation.value || "").trim();
     const gtin = (els.removeGtin.value || "").trim();
     const qty = (els.removeQty.value || "").trim();
-    const bb = normalizeDdMm(els.removeExp.value);
-    if (!loc) {
-      showToast("Enter location");
-      return;
-    }
     if (!gtin) {
       showToast("Scan GTIN");
       return;
     }
     if (!qty) {
       showToast("Enter quantity");
-      return;
-    }
-    if (!/^\d{2}\/\d{2}$/.test(bb)) {
-      showToast("Enter Exp/Best before as DD/MM");
       return;
     }
     const entry = getSelectedEntry();
@@ -1629,7 +1601,7 @@
       return;
     }
     line.removed = true;
-    line.removedMeta = { location: loc, gtin: lineGtin, qty, bestBefore: bb };
+    line.removedMeta = { gtin: lineGtin, qty };
     closeRemoveArticleModal();
     renderDetail();
     showToast("Removed");
