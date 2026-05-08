@@ -163,19 +163,19 @@ button {
   gap: 6px;
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .create-btn {
   height: 32px;
-  padding: 0 10px;
+  padding: 0 8px;
   border: none;
   border-radius: 6px;
   background: var(--accent-blue);
   color: #fff;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -206,7 +206,8 @@ button {
 }
 
 .search-field {
-  flex: 1 1 180px;
+  flex: 1 1 0;
+  min-width: 120px;
   display: flex;
   align-items: center;
   border: 1px solid var(--border);
