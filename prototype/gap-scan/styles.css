@@ -165,6 +165,45 @@ button {
   border-bottom: 1px solid var(--border);
 }
 
+.create-btn {
+  height: 32px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent-blue);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.create-btn:hover {
+  background: #0a4e86;
+}
+
+.create-btn:focus-visible {
+  outline: 2px solid rgba(10, 78, 134, 0.45);
+  outline-offset: 2px;
+}
+
+.create-btn__icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-btn__text {
+  letter-spacing: 0.2px;
+}
+
 .search-field {
   flex: 1;
   display: flex;
@@ -245,38 +284,7 @@ button {
   border-color: var(--accent-blue);
 }
 
-.doc-item--create {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  background: var(--accent-blue);
-  color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.doc-item--create:hover {
-  background: #0a4e86;
-}
-
-.doc-item--create.is-selected {
-  background: #0a4e86;
-  border-color: rgba(0, 0, 0, 0.16);
-}
-
-.doc-item__create-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.doc-item__create-text {
-  letter-spacing: 0.2px;
-}
+/* Create action moved to the master toolbar (see .create-btn). */
 
 .doc-item__row1 {
   display: flex;

@@ -171,6 +171,7 @@
     articleList: document.getElementById("article-list"),
     btnSelectAll: document.getElementById("btn-select-all"),
     btnSave: document.getElementById("btn-save"),
+    btnCreate: document.getElementById("btn-create"),
     footerCreate: document.getElementById("footer-actions-create"),
     footerReplenish: document.getElementById("footer-actions-replenish"),
     btnCloseTask: document.getElementById("btn-close-task"),
@@ -550,28 +551,7 @@
     els.masterList.innerHTML = "";
     documents.forEach((doc) => {
       if (doc.isLanding) {
-        if (q && !doc.label.toLowerCase().includes(q)) return;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className =
-          "doc-item doc-item--create" + (doc.id === selectedId ? " is-selected" : "");
-        btn.innerHTML = `
-          <span class="doc-item__create-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <path d="M14 2v6h6"/>
-              <path d="M12 12v6"/>
-              <path d="M9 15h6"/>
-            </svg>
-          </span>
-          <span class="doc-item__create-text">Create</span>
-        `;
-        btn.addEventListener("click", () => {
-          selectedId = doc.id;
-          renderMaster(els.docSearch.value);
-          renderDetail();
-        });
-        els.masterList.appendChild(btn);
+        // Create action is rendered in the toolbar, not as a list item.
         return;
       }
       if (q && !doc.id.toLowerCase().includes(q)) return;
@@ -1433,6 +1413,14 @@
 
   els.docSearch.addEventListener("input", () => renderMaster(els.docSearch.value));
   els.articleSearch.addEventListener("input", renderDetail);
+  els.btnCreate.addEventListener("click", () => {
+    const createDoc = documents.find((d) => d.isLanding);
+    if (!createDoc) return;
+    selectedId = createDoc.id;
+    els.docSearch.value = "";
+    renderMaster("");
+    renderDetail();
+  });
 
   els.btnSelectAll.addEventListener("click", () => {
     const entry = getSelectedEntry();
