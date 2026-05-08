@@ -534,7 +534,7 @@
     els.detailSummary.innerHTML = `
       <li>Number of Articles : <span>${escapeHtml(String(doc.articles))}</span></li>
       <li>Articles with no stock : <span>${escapeHtml(String(doc.noStock))}</span></li>
-      <li>+12 Hours Gaps : <span>${escapeHtml(String(doc.gaps12h))}</span></li>
+      <li>+4 Hours Gaps : <span>${escapeHtml(String(doc.gaps12h))}</span></li>
     `;
   }
 
@@ -542,7 +542,7 @@
     els.detailSummary.innerHTML = `
       <li>Number of Articles : <span>—</span></li>
       <li>Articles with no stock : <span>—</span></li>
-      <li>+12 Hours Gaps : <span>—</span></li>
+      <li>+4 Hours Gaps : <span>—</span></li>
     `;
   }
 

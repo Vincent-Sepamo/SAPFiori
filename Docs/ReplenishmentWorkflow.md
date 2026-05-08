@@ -32,7 +32,7 @@ This document describes the **end-to-end user journey** and **behavioural rules*
 
 - **Number of Articles**
 - **Articles with no stock**
-- **+12 Hours Gaps**
+- **+4 Hours Gaps**
 
 ### 3.2 Article list (per line)
 

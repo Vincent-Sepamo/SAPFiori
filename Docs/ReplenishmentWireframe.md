@@ -57,7 +57,7 @@ Detail area
 
   • Number of Articles :  n
   • Articles with no stock :  n
-  • +12 Hours Gaps :  n
+  • +4 Hours Gaps :  n
 
   | Search by Article Name … |  [↻] [🔍] [filter]
 
