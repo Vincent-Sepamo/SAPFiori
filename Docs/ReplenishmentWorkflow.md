@@ -44,15 +44,15 @@ This document describes the **end-to-end user journey** and **behavioural rules*
 | **SOH** | **Stock on hand** derived from mock location data (prefers `S001` quantity when present in the line’s location string). |
 | **SOH = 0** | Also shows **SOO: 200** (example) and **Created at:** `DD/MM/YYYY` (from mock data). |
 | **Location / hyperlink** | **Removed** from this screen (no “view” link here). |
-| **Selection** | Checkbox per selectable row; error rows may be non-selectable. |
+| **Selection** | **Hidden until a filter is applied**. After the user applies the Articles filter at least once, checkboxes appear for selectable rows; error rows may be non-selectable. |
 | **Search** | Filters by name, article id, or GTIN. |
 
 ### 3.3 Footer actions
 
 | Action | Rule |
 |--------|------|
-| **Select All** | Toggles all visible checkboxes. |
-| **Save** | Requires **at least one** selected article. Creates **`WO00000013`** (In Progress), inserts it in the documents list, switches detail to that work order. If `WO00000013` already exists, shows a message instead of duplicating. |
+| **Select All** | Disabled until the user applies the Articles filter at least once; then toggles all visible checkboxes. |
+| **Save** | Disabled until the user applies the Articles filter at least once. Requires **at least one** selected article. Creates **`WO00000013`** (In Progress), inserts it in the documents list, switches detail to that work order. If `WO00000013` already exists, shows a message instead of duplicating. |
 
 ---
 
@@ -80,10 +80,8 @@ This document describes the **end-to-end user journey** and **behavioural rules*
 
 | Field | Rule |
 |-------|------|
-| Scan / Enter location | Required. |
 | Scan GTIN | Required; **not** auto-filled — user must scan. |
 | Enter quantity | Required. |
-| Exp/Best before | Required, format **DD/MM** (auto-formatting while typing). |
 | **Save** (primary) | Marks line **Removed**: green **Removed**, row **greyed out**, **no View**, **not clickable**, sorted to **bottom**. |
 | **Cancel** | Closes without change. |
 | **BIN** (footer, red icon) | Opens **Article Not Found** (row key preserved). |

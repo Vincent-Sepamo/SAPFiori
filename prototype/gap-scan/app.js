@@ -241,6 +241,7 @@
     department: "",
     bmc: "",
   };
+  let hasAppliedArticleFilter = false;
 
   function getSelectedEntry() {
     return documents.find((d) => d.id === selectedId);
@@ -1095,6 +1096,7 @@
     els.detailTitle.textContent = "Create New";
     setSummaryCreate(doc);
 
+    const allowSelection = hasAppliedArticleFilter;
     const aq = (els.articleSearch.value || "").trim().toLowerCase();
     visibleLines = doc.lines.filter(
       (l) =>
@@ -1111,7 +1113,9 @@
       row.className = "article-row" + (line.error ? " is-error" : "");
       const selectable = line.selectable !== false;
       const checkCol = selectable
-        ? `<input type="checkbox" class="row-check js-row-check" data-idx="${idx}" aria-label="Select ${escapeHtml(line.name)}" />`
+        ? allowSelection
+          ? `<input type="checkbox" class="row-check js-row-check" data-idx="${idx}" aria-label="Select ${escapeHtml(line.name)}" />`
+          : `<span class="article-row__check-spacer" aria-hidden="true"></span>`
         : `<span class="article-row__check-spacer" aria-hidden="true"></span>`;
 
       const soh = parseSohFromLoc(line.loc);
@@ -1142,6 +1146,10 @@
       `;
       els.articleList.appendChild(row);
     });
+
+    if (!allowSelection) {
+      showToast("Apply a filter to enable selection");
+    }
   }
 
   function renderReplenishmentDetail(r, entry) {
@@ -1431,6 +1439,11 @@
   els.articleSearch.addEventListener("input", renderDetail);
 
   els.btnSelectAll.addEventListener("click", () => {
+    const entry = getSelectedEntry();
+    if (getDetailPayload(entry) && !hasAppliedArticleFilter) {
+      showToast("Filter articles first to enable selection");
+      return;
+    }
     const checks = els.articleList.querySelectorAll(".js-row-check");
     if (!checks.length) {
       showToast("No rows to select");
@@ -1446,6 +1459,10 @@
   els.btnSave.addEventListener("click", () => {
     const createDoc = getDetailPayload(getSelectedEntry());
     if (!createDoc) return;
+    if (!hasAppliedArticleFilter) {
+      showToast("Filter articles first to enable selection");
+      return;
+    }
 
     const n = els.articleList.querySelectorAll(".js-row-check:checked").length;
     if (n === 0) {
@@ -1525,6 +1542,7 @@
       department: els.filterDepartment.value,
       bmc: els.filterBmc.value,
     };
+    hasAppliedArticleFilter = true;
     closeFilterModal();
     const parts = [
       appliedArticleFilter.scanner && `Scanner: ${appliedArticleFilter.scanner}`,
@@ -1538,6 +1556,7 @@
         ? `Filter applied — ${parts.join(" · ")}`
         : "Filter applied (no criteria selected)"
     );
+    renderDetail();
   });
 
   document.getElementById("btn-filter-articles").addEventListener("click", () => {

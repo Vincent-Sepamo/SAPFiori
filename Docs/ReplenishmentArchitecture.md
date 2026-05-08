@@ -114,6 +114,14 @@ Replace the iframe with:
 
 This is the recommended direction once SAP contracts are defined.
 
+### 5.4 On‑prem (enterprise) deployment options
+
+If you need to run this product **on‑prem** (inside a corporate network), the same architecture can be hosted without Streamlit Community Cloud:
+
+- **Option A — On‑prem Streamlit**: deploy `streamlit_app/app.py` to an internal VM / Kubernetes / SAP BTP (Kyma)–style runtime; terminate TLS at your ingress; integrate SSO upstream.
+- **Option B — Static SPA hosting**: serve `prototype/gap-scan/` from an internal web server (e.g. Nginx/IIS). (If you keep the “inline bundle” approach, you don’t need a static server; if you switch to static hosting, you can load `index.html` directly.)
+- **Option C — Future production**: replace in-memory state with SAP APIs and ship a proper Fiori/React frontend; Streamlit becomes optional.
+
 ### 5.3 Repository layout
 
 ```

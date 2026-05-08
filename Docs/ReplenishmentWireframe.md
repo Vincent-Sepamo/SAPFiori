@@ -70,6 +70,8 @@ Detail area
   └──────────┴─────────────────────────────┴─────────────────┴───┘
 ```
 
+**Selection rule:** checkboxes (and Select All / Save) are **hidden/disabled until the user applies the Articles filter at least once**.
+
 ---
 
 ## 3. Work order in progress — gap replenishment (`WO00000013`)
@@ -134,13 +136,9 @@ Detail area
         ╔══════════════════════════════════════╗
         ║  Remove Article                      ║
         ╠══════════════════════════════════════╣
-        ║  Scan / Enter location:              ║
-        ║  |………………………………………………|              ║
         ║  Scan GTIN:                          ║
         ║  |………………………………………………|              ║
         ║  Enter Quantity:                     ║
-        ║  |………………………………………………|              ║
-        ║  Exp/Best before Date: DD/MM only    ║
         ║  |………………………………………………|              ║
         ╠══════════════════════════════════════╣
         ║ [🗑 BIN]          ( Cancel ) ( Save )║  ← BIN left; Save primary right
