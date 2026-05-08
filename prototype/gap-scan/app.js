@@ -554,8 +554,18 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className =
-          "doc-item doc-item--action" + (doc.id === selectedId ? " is-selected" : "");
-        btn.textContent = doc.label;
+          "doc-item doc-item--create" + (doc.id === selectedId ? " is-selected" : "");
+        btn.innerHTML = `
+          <span class="doc-item__create-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M12 12v6"/>
+              <path d="M9 15h6"/>
+            </svg>
+          </span>
+          <span class="doc-item__create-text">Create</span>
+        `;
         btn.addEventListener("click", () => {
           selectedId = doc.id;
           renderMaster(els.docSearch.value);

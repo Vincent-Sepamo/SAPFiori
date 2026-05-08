@@ -245,6 +245,39 @@ button {
   border-color: var(--accent-blue);
 }
 
+.doc-item--create {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  background: var(--accent-blue);
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.doc-item--create:hover {
+  background: #0a4e86;
+}
+
+.doc-item--create.is-selected {
+  background: #0a4e86;
+  border-color: rgba(0, 0, 0, 0.16);
+}
+
+.doc-item__create-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.doc-item__create-text {
+  letter-spacing: 0.2px;
+}
+
 .doc-item__row1 {
   display: flex;
   justify-content: space-between;
